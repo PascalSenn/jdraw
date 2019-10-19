@@ -7,9 +7,12 @@ package jdraw.figures;
 
 import jdraw.framework.Figure;
 import jdraw.framework.FigureHandle;
+import jdraw.handles.LineEndHandle;
+import jdraw.handles.LineStartHandle;
 
 import java.awt.*;
 import java.awt.geom.Line2D;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,7 +20,7 @@ import java.util.List;
  *
  * @author Christoph Denzler
  */
-public class Line extends RectangularShapeStrategy<Line2D> {
+public class Line extends PointToPointBase<Line2D> {
     private static final long serialVersionUID = 9120181044386552132L;
 
     /**
@@ -29,17 +32,17 @@ public class Line extends RectangularShapeStrategy<Line2D> {
      * @param h the rectangle's height
      */
     public Line(int x, int y, int w, int h) {
-        super(new Line2D.Double(), x,y,w,h);
-    }
-
-
-    @Override
-    protected void drawFill(Graphics g, int x, int y, int width, int height) {
+        super(new Line2D.Double(), x, y, w, h);
     }
 
     @Override
-    protected void drawBorder(Graphics g, int x, int y, int width, int height) {
-        g.drawLine(x,y,x+ width,y+height);
+    protected void drawFill(Graphics g, Point start, Point end) {
+
+    }
+
+    @Override
+    protected void drawBorder(Graphics g, Point start, Point end) {
+        g.drawLine(start.x, start.y, end.x, end.y);
     }
 
     @Override
@@ -55,7 +58,10 @@ public class Line extends RectangularShapeStrategy<Line2D> {
      */
     @Override
     public List<FigureHandle> getHandles() {
-        return null;
+        var list = new ArrayList<FigureHandle>();
+        list.add(new LineEndHandle(this));
+        list.add(new LineStartHandle(this));
+        return list;
     }
 
     @Override

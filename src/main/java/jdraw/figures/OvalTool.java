@@ -28,7 +28,7 @@ public class OvalTool extends RectangularShapeToolBase {
 
 
 	@Override
-	public RectangularShapeStrategy createFigure(int x, int y) {
+	public RectangularShapeBase createFigure(int x, int y) {
 		return new Oval(x, y, 0, 0);
 	}
 

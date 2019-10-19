@@ -14,18 +14,19 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 
 /**
- * This tool defines a mode for drawing rectangles.
+ * This tool defines a mode for drawing point to point shapes.
  *
  * @author Christoph Denzler
  * @see jdraw.framework.Figure
  */
-public abstract class RectangularShapeToolBase extends ToolBase {
+public abstract class PointToPointToolBase extends ToolBase {
+
     /**
      * Temporary variable. During  shape creation (during a
      * mouse down - mouse drag - mouse up cycle) this variable refers
      * to the new rectangle that is inserted.
      */
-    protected RectangularShapeBase newShape = null;
+    protected PointToPointBase newShape = null;
 
     /**
      * Temporary variable.
@@ -34,24 +35,23 @@ public abstract class RectangularShapeToolBase extends ToolBase {
      */
     protected Point anchor = null;
 
+
     /**
      * Create a new rectangular shape tool for the given context.
      *
      * @param context a context to use this tool in.
      */
-    public RectangularShapeToolBase(String name, DrawContext context) {
+    public PointToPointToolBase(String name, DrawContext context) {
         super(name, context);
     }
-
-
     /**
-     * Initializes a new Rectangle object
+     * Initializes a new point to point object
      *
      * @param x x-coordinate of mouse
      * @param y y-coordinate of mouse
      * @see DrawTool#mouseDown(int, int, MouseEvent)
      */
-    public abstract RectangularShapeBase createFigure(int x, int y);
+    public abstract PointToPointBase createFigure(int x, int y);
 
     public abstract void updateFigure(int x, int y);
 
@@ -87,8 +87,8 @@ public abstract class RectangularShapeToolBase extends ToolBase {
      */
     @Override
     public final void mouseDrag(int x, int y, MouseEvent e) {
-		updateFigure(x, y);
-        java.awt.Rectangle r = newShape.getBounds();
+        updateFigure(x, y);
+        Rectangle r = newShape.getBounds();
         this.context.showStatusText("w: " + r.width + ", h: " + r.height);
     }
 
@@ -108,4 +108,5 @@ public abstract class RectangularShapeToolBase extends ToolBase {
         anchor = null;
         this.context.showStatusText("Rectangle Mode");
     }
+
 }

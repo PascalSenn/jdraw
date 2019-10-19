@@ -8,6 +8,7 @@ package jdraw.figures;
 import jdraw.framework.DrawContext;
 
 import java.awt.*;
+import java.awt.geom.Line2D;
 
 /**
  * This tool defines a mode for drawing lines.
@@ -15,7 +16,7 @@ import java.awt.*;
  * @author Christoph Denzler
  * @see jdraw.framework.Figure
  */
-public class LineTool extends RectangularShapeToolBase {
+public class LineTool extends PointToPointToolBase {
 
 	/**
 	 * Create a new line tool for the given context.
@@ -28,7 +29,7 @@ public class LineTool extends RectangularShapeToolBase {
 
 
 	@Override
-	public RectangularShapeStrategy createFigure(int x, int y) {
+	public PointToPointBase<Line2D> createFigure(int x, int y) {
 		return new Line(x, y, 0, 0);
 	}
 

@@ -19,13 +19,22 @@ import java.awt.event.MouseEvent;
  * @author Christoph Denzler
  * @see jdraw.framework.Figure
  */
-public abstract class RectangularShapeToolBase extends ToolBase {
+public abstract class ToolBase implements DrawTool {
     /**
-     * Temporary variable. During  shape creation (during a
-     * mouse down - mouse drag - mouse up cycle) this variable refers
-     * to the new rectangle that is inserted.
+     * the image resource path.
      */
-    protected RectangularShapeBase newShape = null;
+    private static final String IMAGES = "/images/";
+
+    /**
+     * The context we use for drawing.
+     */
+    protected final DrawContext context;
+
+    /**
+     * The context's view. This variable can be used as a shortcut, i.e.
+     * instead of calling context.getView().
+     */
+    protected final DrawView view;
 
     /**
      * Temporary variable.
@@ -34,24 +43,39 @@ public abstract class RectangularShapeToolBase extends ToolBase {
      */
     protected Point anchor = null;
 
+    public final String name;
+
     /**
      * Create a new rectangular shape tool for the given context.
      *
      * @param context a context to use this tool in.
      */
-    public RectangularShapeToolBase(String name, DrawContext context) {
-        super(name, context);
+    public ToolBase(String name, DrawContext context) {
+        this.name = name;
+        this.context = context;
+        this.view = context.getView();
     }
 
+    /**
+     * Deactivates the current mode by resetting the cursor
+     * and clearing the status bar.
+     *
+     * @see DrawTool#deactivate()
+     */
+    @Override
+    public final void deactivate() {
+        this.context.showStatusText("");
+    }
 
     /**
-     * Initializes a new Rectangle object
-     *
-     * @param x x-coordinate of mouse
-     * @param y y-coordinate of mouse
-     * @see DrawTool#mouseDown(int, int, MouseEvent)
+     * Activates the Rectangle Mode. There will be a
+     * specific menu added to the menu bar that provides settings for
+     * Rectangle attributes
      */
-    public abstract RectangularShapeBase createFigure(int x, int y);
+    @Override
+    public final void activate() {
+        this.context.showStatusText("Rectangle Mode");
+    }
 
     public abstract void updateFigure(int x, int y);
 
@@ -66,14 +90,7 @@ public abstract class RectangularShapeToolBase extends ToolBase {
      * @see DrawTool#mouseDown(int, int, MouseEvent)
      */
     @Override
-    public final void mouseDown(int x, int y, MouseEvent e) {
-        if (newShape != null) {
-            throw new IllegalStateException();
-        }
-        anchor = new Point(x, y);
-        newShape = createFigure(x, y);
-        view.getModel().addFigure(newShape);
-    }
+    public abstract void mouseDown(int x, int y, MouseEvent e);
 
     /**
      * During a mouse drag, the Rectangle will be resized according to the mouse
@@ -86,11 +103,7 @@ public abstract class RectangularShapeToolBase extends ToolBase {
      * @see DrawTool#mouseDrag(int, int, MouseEvent)
      */
     @Override
-    public final void mouseDrag(int x, int y, MouseEvent e) {
-		updateFigure(x, y);
-        java.awt.Rectangle r = newShape.getBounds();
-        this.context.showStatusText("w: " + r.width + ", h: " + r.height);
-    }
+    public abstract void mouseDrag(int x, int y, MouseEvent e);
 
     /**
      * When the user releases the mouse, the Rectangle object is updated
@@ -103,9 +116,21 @@ public abstract class RectangularShapeToolBase extends ToolBase {
      * @see DrawTool#mouseUp(int, int, MouseEvent)
      */
     @Override
-    public final void mouseUp(int x, int y, MouseEvent e) {
-        newShape = null;
-        anchor = null;
-        this.context.showStatusText("Rectangle Mode");
+    public abstract void mouseUp(int x, int y, MouseEvent e);
+
+    @Override
+    public final Cursor getCursor() {
+        return Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR);
     }
+
+    @Override
+    public final Icon getIcon() {
+        return new ImageIcon(getClass().getResource(IMAGES + name.toLowerCase() + ".png"));
+    }
+
+    @Override
+    public final String getName() {
+        return name;
+    }
+
 }

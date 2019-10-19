@@ -29,7 +29,7 @@ public class RectTool extends RectangularShapeToolBase {
 
 
     @Override
-    public RectangularShapeStrategy createFigure(int x, int y) {
+    public RectangularShapeBase createFigure(int x, int y) {
         return new Rect(x, y, 0, 0);
     }
 

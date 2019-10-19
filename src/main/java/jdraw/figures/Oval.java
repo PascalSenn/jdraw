@@ -7,9 +7,14 @@ package jdraw.figures;
 
 import jdraw.framework.Figure;
 import jdraw.framework.FigureHandle;
+import jdraw.handles.EastHandle;
+import jdraw.handles.NorthHandle;
+import jdraw.handles.SouthHandle;
+import jdraw.handles.WestHandle;
 
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,7 +22,7 @@ import java.util.List;
  *
  * @author Christoph Denzler
  */
-public class Oval extends RectangularShapeStrategy<Ellipse2D> {
+public class Oval extends RectangularShapeBase<Ellipse2D> {
     private static final long serialVersionUID = 9120181044386552132L;
 
     /**
@@ -45,8 +50,16 @@ public class Oval extends RectangularShapeStrategy<Ellipse2D> {
     }
 
     @Override
+    public void move(Ellipse2D shape, int dx, int dy) {
+        var bounds = shape.getBounds();
+        shape.setFrame(bounds.x+dx,bounds.y+dy, bounds.width, bounds.height);
+    }
+
+
+    @Override
     public void setBoundsOnShape(Ellipse2D shape, Point origin, Point corner) {
         shape.setFrameFromDiagonal(origin, corner);
+
     }
 
     /**
@@ -57,7 +70,12 @@ public class Oval extends RectangularShapeStrategy<Ellipse2D> {
      */
     @Override
     public List<FigureHandle> getHandles() {
-        return null;
+        var list = new ArrayList<FigureHandle>();
+        list.add(new NorthHandle(this));
+        list.add(new EastHandle(this));
+        list.add(new WestHandle(this));
+        list.add(new SouthHandle(this));
+        return list;
     }
 
     @Override
