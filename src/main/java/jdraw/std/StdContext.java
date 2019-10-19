@@ -129,14 +129,14 @@ public class StdContext extends AbstractContext {
         orderMenu.add(backItem);
         editMenu.add(orderMenu);
 
-        JMenu grid = new JMenu("Grid...");
+        JMenu grid = new JMenu("Grid..."); 
 
 		JMenuItem basicGrid = new JMenuItem("BasicGrid");
 		basicGrid.addActionListener((e) -> getView().setGrid(new BasicGrid()));
 		JMenuItem noGrid = new JMenuItem("No Grid");
 		basicGrid.addActionListener((e) -> getView().setGrid(null));
 		grid.add(noGrid);
-		grid.add(basicGrid);
+		grid.add(basicGrid); 
         editMenu.add(grid);
 
         return editMenu;
