@@ -6,6 +6,8 @@
 package jdraw.framework;
 
 import java.awt.Point;
+import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * A DrawGrid is used to restrict the coordinates used when the mouse is
@@ -58,7 +60,8 @@ public interface DrawGrid {
      * Indicates that a mouse interaction was just started. This method might be
      * used to setup data used during this mouse interaction.
      */
-    void mouseDown();
+    void mouseDown(Stream<Figure> figures, List<Figure> selection);
+    // XXX ok, you changed the interface in order to get the necessary information. This information could also be passed over the constructors.
 
     /**
      * Indicates that a mouse interaction has been finished. This method might be

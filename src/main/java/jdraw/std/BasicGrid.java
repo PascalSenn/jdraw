@@ -1,8 +1,12 @@
 package jdraw.std;
 
 import jdraw.framework.DrawGrid;
+import jdraw.framework.Figure;
+import jdraw.framework.FigureHandle;
 
 import java.awt.*;
+import java.util.List;
+import java.util.stream.Stream;
 
 public class BasicGrid implements DrawGrid {
     public final int step = 50;
@@ -12,9 +16,12 @@ public class BasicGrid implements DrawGrid {
     public Point constrainPoint(Point p) {
         int yDelta = p.y % step;
         int xDelta = p.x % step;
-        yDelta = yDelta > step / 2 ? step-yDelta : -yDelta;
-        xDelta = xDelta > step / 2 ? step-xDelta : -xDelta;
-
+        // XXX attention: if p.x or p.y is negative, then xDelta or yDelta is negative as well,
+        //     i.e. the test whether xyDelta is > step/2 is always false, which is not the intended behavior. Negative positions
+        //     on the ohter side are not usual, but if you spawn a new figure and move the mouse above the upper border and left
+        //     to the left window border, then negative coordinates are mapped.
+        yDelta = yDelta > step / 2 ? step - yDelta : -yDelta;
+        xDelta = xDelta > step / 2 ? step - xDelta : -xDelta;
         return new Point(p.x + xDelta, p.y + yDelta);
     }
 
@@ -40,9 +47,10 @@ public class BasicGrid implements DrawGrid {
     }
 
     @Override
-    public void mouseDown() {
+    public void mouseDown(Stream<Figure> figures, List<Figure> selection) {
 
     }
+
 
     @Override
     public void mouseUp() {
