@@ -161,7 +161,7 @@ public final class StdDrawView extends JComponent implements DrawView {
     private Point constrainPoint(Point p, int mode) {
         if (grid != null) {
             if (mode == 1) {
-                grid.mouseDown();
+                grid.mouseDown(model.getFigures(), selection);
             }
             p = grid.constrainPoint(p);
             if (mode == 2) {
