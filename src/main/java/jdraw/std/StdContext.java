@@ -8,6 +8,7 @@ import java.io.File;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import javax.swing.JFileChooser;
 import javax.swing.JMenu;
@@ -23,6 +24,8 @@ import jdraw.framework.DrawTool;
 import jdraw.framework.DrawToolFactory;
 import jdraw.framework.DrawView;
 import jdraw.framework.Figure;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * Standard implementation of interface DrawContext.
@@ -107,11 +110,15 @@ public class StdContext extends AbstractContext {
 
         editMenu.addSeparator();
         JMenuItem group = new JMenuItem("Group");
-        group.setEnabled(false);
+        group.addActionListener(e -> {
+            group(getView());
+        });
         editMenu.add(group);
 
         JMenuItem ungroup = new JMenuItem("Ungroup");
-        ungroup.setEnabled(false);
+        ungroup.addActionListener(e -> {
+            ungroup(getView());
+        });
         editMenu.add(ungroup);
 
         editMenu.addSeparator();
@@ -135,9 +142,9 @@ public class StdContext extends AbstractContext {
         basicGrid.addActionListener((e) -> getView().setGrid(new BasicGrid()));
         JMenuItem snapGrid = new JMenuItem("SnapGrid");
         snapGrid.addActionListener((e) -> getView().setGrid(new SnapGrid()));
-		JMenuItem noGrid = new JMenuItem("No Grid");
+        JMenuItem noGrid = new JMenuItem("No Grid");
         noGrid.addActionListener((e) -> getView().setGrid(null));
-		grid.add(noGrid);
+        grid.add(noGrid);
         grid.add(snapGrid);
         grid.add(basicGrid);
         editMenu.add(grid);
@@ -189,13 +196,14 @@ public class StdContext extends AbstractContext {
      */
     public void bringToFront(DrawModel model, List<Figure> selection) {
         // the figures in the selection are ordered according to the order in the model
-        List<Figure> orderedSelection = model.getFigures().filter(f -> selection.contains(f)).collect(Collectors.toList());
+        List<Figure> orderedSelection = model.getFigures().filter(f -> selection.contains(f)).collect(toList());
         Collections.reverse(orderedSelection);
         int pos = (int) model.getFigures().count();
         for (Figure f : orderedSelection) {
             model.setFigureIndex(f, --pos);
         }
     }
+
 
     /**
      * Changes the order of figures and moves the figures in the selection
@@ -206,12 +214,45 @@ public class StdContext extends AbstractContext {
      */
     public void sendToBack(DrawModel model, List<Figure> selection) {
         // the figures in the selection are ordered according to the order in the model
-        List<Figure> orderedSelection = model.getFigures().filter(f -> selection.contains(f)).collect(Collectors.toList());
+        List<Figure> orderedSelection = model.getFigures().filter(f -> selection.contains(f)).collect(toList());
         int pos = 0;
         for (Figure f : orderedSelection) {
             model.setFigureIndex(f, pos++);
         }
     }
+
+    public void group(DrawView view) {
+        var model = view.getModel();
+        var selection = view.getSelection();
+        var group = new Group(selection);
+        group.getFigureParts().forEach(f -> {
+            model.removeFigure(f);
+            view.removeFromSelection(f);
+        });
+        model.addFigure(group);
+        view.addToSelection(group);
+    }
+
+    public void ungroup(DrawView view) {
+        var model = view.getModel();
+        var selection = view.getSelection();
+        var groups = selection.stream()
+                .filter(x -> x instanceof Group)
+                .map(g -> ((Group) g))
+                .collect(toList());
+        groups.forEach(g -> {
+            model.removeFigure(g);
+            view.removeFromSelection(g);
+        });
+        groups.stream()
+                .flatMap(x -> StreamSupport.stream(x.getFigureParts().spliterator(), false))
+                .forEach(f -> {
+                    model.addFigure(f);
+                    view.addToSelection(f);
+                });
+
+    }
+
 
     /**
      * Handles the saving of a drawing to a file.
