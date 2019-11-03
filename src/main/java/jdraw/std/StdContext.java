@@ -224,13 +224,16 @@ public class StdContext extends AbstractContext {
     public void group(DrawView view) {
         var model = view.getModel();
         var selection = view.getSelection();
-        var group = new Group(selection);
-        group.getFigureParts().forEach(f -> {
-            model.removeFigure(f);
-            view.removeFromSelection(f);
-        });
-        model.addFigure(group);
-        view.addToSelection(group);
+        if (selection.size() > 0) {
+            var group = new Group(selection);
+            group.getFigureParts().forEach(f -> {
+                model.removeFigure(f);
+                view.removeFromSelection(f);
+            });
+            model.addFigure(group);
+            view.addToSelection(group);
+        }
+
     }
 
     public void ungroup(DrawView view) {
