@@ -34,25 +34,34 @@ public class Oval extends RectangularShapeBase<Ellipse2D> {
      * @param h the rectangle's height
      */
     public Oval(int x, int y, int w, int h) {
-        super(new Ellipse2D.Double(), x,y,w,h);
+        super(x, y, w, h);
+    }
+
+    public Oval(Oval oval) {
+        super(oval);
+    }
+
+    @Override
+    protected Ellipse2D createShape() {
+        return new Ellipse2D.Double();
     }
 
 
     @Override
     protected void drawFill(Graphics g, int x, int y, int width, int height) {
-        g.fillOval(x,y,width,height);
+        g.fillOval(x, y, width, height);
     }
 
     @Override
     protected void drawBorder(Graphics g, int x, int y, int width, int height) {
-        g.drawOval(x,y,width,height);
+        g.drawOval(x, y, width, height);
 
     }
 
     @Override
     public void move(Ellipse2D shape, int dx, int dy) {
         var bounds = shape.getBounds();
-        shape.setFrame(bounds.x+dx,bounds.y+dy, bounds.width, bounds.height);
+        shape.setFrame(bounds.x + dx, bounds.y + dy, bounds.width, bounds.height);
     }
 
 
@@ -80,7 +89,7 @@ public class Oval extends RectangularShapeBase<Ellipse2D> {
 
     @Override
     public Figure clone() {
-        return null;
+        return new Oval(this);
     }
 
 

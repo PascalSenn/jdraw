@@ -5,6 +5,7 @@
 package jdraw.std;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -97,9 +98,15 @@ public class StdContext extends AbstractContext {
         );
 
         editMenu.addSeparator();
-        editMenu.add("Cut").setEnabled(false);
-        editMenu.add("Copy").setEnabled(false);
-        editMenu.add("Paste").setEnabled(false);
+        editMenu.add("Cut").addActionListener(e -> {
+            cut(getView());
+        });
+        editMenu.add("Copy").addActionListener(e -> {
+            copy(getView());
+        });
+        editMenu.add("Paste").addActionListener(e -> {
+            paste(getView());
+        });
 
         editMenu.addSeparator();
         JMenuItem clear = new JMenuItem("Clear");
@@ -233,6 +240,7 @@ public class StdContext extends AbstractContext {
         view.addToSelection(group);
     }
 
+
     public void ungroup(DrawView view) {
         var model = view.getModel();
         var selection = view.getSelection();
@@ -307,5 +315,47 @@ public class StdContext extends AbstractContext {
                     + chooser.getSelectedFile().getName());
         }
     }
+
+    private List<Figure> clipboard;
+
+    private void cut(DrawView view) {
+        if (view.getSelection().size() > 0) {
+            clipboard = view.getSelection();
+            var model = view.getModel();
+            view.getSelection().stream().forEach(f -> {
+                        view.removeFromSelection(f);
+                        model.removeFigure(f);
+                    }
+            );
+        }
+    }
+
+    private void copy(DrawView view) {
+        // clone on copy to keep the original reference (position e.g.)
+        if (view.getSelection().size() > 0) {
+            clipboard = view
+                    .getSelection()
+                    .stream()
+                    .map(Figure::clone)
+                    .collect(Collectors.toUnmodifiableList());
+        }
+    }
+
+    private void paste(DrawView view) {
+        if (clipboard != null && clipboard.size() > 0) {
+            // clone on paste to keep the original reference
+            var model = view.getModel();
+            clipboard.stream()
+                    .map(Figure::clone)
+                    .forEach(f -> {
+                                model.addFigure(f);
+                                view.addToSelection(f);
+                            }
+                    );
+        }
+
+
+    }
+
 
 }

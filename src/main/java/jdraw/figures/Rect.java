@@ -32,7 +32,17 @@ public class Rect extends RectangularShapeBase<Rectangle2D> {
      * @param h the rectangle's height
      */
     public Rect(int x, int y, int w, int h) {
-        super(new Rectangle2D.Double(), x, y, w, h);
+        super(x, y, w, h);
+    }
+
+
+    public Rect(Rect rect) {
+        super(rect);
+    }
+
+    @Override
+    protected Rectangle2D createShape() {
+        return new Rectangle2D.Double();
     }
 
     @Override
@@ -78,7 +88,7 @@ public class Rect extends RectangularShapeBase<Rectangle2D> {
 
     @Override
     public Figure clone() {
-        return null;
+        return new Rect(this);
     }
 
 

@@ -32,7 +32,11 @@ public class Line extends PointToPointBase<Line2D> {
      * @param h the rectangle's height
      */
     public Line(int x, int y, int w, int h) {
-        super(new Line2D.Double(), x, y, w, h);
+        super(x, y, w, h);
+    }
+
+    public Line(Line line) {
+        super(line);
     }
 
     @Override
@@ -48,6 +52,11 @@ public class Line extends PointToPointBase<Line2D> {
     @Override
     public void setBoundsOnShape(Line2D shape, Point origin, Point corner) {
         shape.setLine(origin, corner);
+    }
+
+    @Override
+    protected Line2D createShape() {
+        return new Line2D.Double();
     }
 
     /**
@@ -66,7 +75,7 @@ public class Line extends PointToPointBase<Line2D> {
 
     @Override
     public Figure clone() {
-        return null;
+        return new Line(this);
     }
 
 

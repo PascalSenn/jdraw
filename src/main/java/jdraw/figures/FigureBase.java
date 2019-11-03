@@ -7,10 +7,19 @@ import jdraw.framework.FigureListener;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collectors;
 
 public abstract class FigureBase implements Figure {
+    private final List<FigureListener> changeListeners;
 
-    private final List<FigureListener> changeListeners = new CopyOnWriteArrayList<>();
+    public FigureBase(FigureBase figureBase) {
+        this.changeListeners = new CopyOnWriteArrayList<>(figureBase.changeListeners);
+    }
+
+    public FigureBase() {
+        this.changeListeners = new CopyOnWriteArrayList<>();
+    }
+
 
     @Override
     public void addFigureListener(FigureListener listener) {

@@ -16,13 +16,23 @@ import java.awt.geom.RectangularShape;
  * @param <T>
  */
 public abstract class RectangularShapeBase<T extends Shape> extends FigureBase {
-
+    private Point start;
+    private Point end;
     private T shape;
 
 
-    public RectangularShapeBase(T shape, int x, int y, int w, int h) {
-        this.shape = shape;
-        this.setBounds(new Point(x, y), new Point(x + w, y + h));
+    public RectangularShapeBase(int x, int y, int w, int h) {
+        this.shape = this.createShape();
+        start = new Point(x, y);
+        end = new Point(x + w, y + h);
+        this.setBounds(start, end);
+    }
+
+    public RectangularShapeBase(RectangularShapeBase<T> source) {
+        this.shape = this.createShape();
+        start = new Point(source.start.x, source.start.y);
+        end = new Point(source.end.x, source.end.y);
+        this.setBoundsOnShape(this.shape, start, end);
     }
 
     /**
@@ -38,6 +48,8 @@ public abstract class RectangularShapeBase<T extends Shape> extends FigureBase {
         drawBorder(g, getBounds().x, getBounds().y, getBounds().width, getBounds().height);
     }
 
+    protected abstract T createShape();
+
     protected abstract void drawFill(Graphics g, int x, int y, int width, int height);
 
     protected abstract void drawBorder(Graphics g, int x, int y, int width, int height);
@@ -46,10 +58,14 @@ public abstract class RectangularShapeBase<T extends Shape> extends FigureBase {
 
     @Override
     public final void setBounds(Point origin, Point corner) {
+        start = origin;
+        end = corner;
         setBoundsOnShape(shape, origin, corner);
         handleFigureChange();
     }
-    public abstract void move(T shape, int dx, int dy) ;
+
+    public abstract void move(T shape, int dx, int dy);
+
     @Override
     public final void move(int dx, int dy) {
         if (dx != 0 && dy != 0) {

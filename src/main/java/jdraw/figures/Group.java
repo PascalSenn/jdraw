@@ -7,6 +7,7 @@ import jdraw.framework.FigureListener;
 
 import java.awt.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -15,6 +16,13 @@ public class Group implements Figure, FigureGroup {
 
     public Group(List<Figure> figures) {
         this.figures = figures;
+    }
+
+    public Group(Group group) {
+        this.figures = group.figures
+                .stream()
+                .map(x -> x.clone())
+                .collect(Collectors.toUnmodifiableList());
     }
 
     @Override
@@ -61,7 +69,7 @@ public class Group implements Figure, FigureGroup {
 
     @Override
     public Figure clone() {
-        return null;
+        return new Group(this);
     }
 
     @Override

@@ -12,12 +12,19 @@ import java.awt.*;
 public abstract class PointToPointBase<T extends Shape> extends FigureBase {
     private Point start;
     private Point end;
-    private final T shape;
+    private T shape;
 
-    public PointToPointBase(T shape, int x1, int y1, int x2, int y2) {
-        this.shape = shape;
+    public PointToPointBase(int x1, int y1, int x2, int y2) {
+        this.shape = this.createShape();
         start = new Point(x1, y1);
         end = new Point(x1, y1);
+    }
+
+    public PointToPointBase(PointToPointBase<T> source) {
+        this.shape = this.createShape();
+        start = new Point(source.start.x, source.start.y);
+        end = new Point(source.end.x, source.end.y);
+        this.setBoundsOnShape(this.shape, start, end);
     }
 
     /**
@@ -65,6 +72,8 @@ public abstract class PointToPointBase<T extends Shape> extends FigureBase {
     public final Rectangle getBounds() {
         return shape.getBounds();
     }
+
+    protected abstract T createShape();
 
 
 }
