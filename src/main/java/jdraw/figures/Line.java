@@ -75,6 +75,7 @@ public class Line extends PointToPointBase<Line2D> {
 
     @Override
     public Figure clone() {
+    	// XXX the return type could be raised to Line, and since with copy constructor cloning every non-abstract class must define its own clone method, I would recomment to adjust the return type. 
         return new Line(this);
     }
 

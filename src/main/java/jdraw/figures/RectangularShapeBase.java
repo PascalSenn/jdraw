@@ -29,6 +29,7 @@ public abstract class RectangularShapeBase<T extends Shape> extends FigureBase {
     }
 
     public RectangularShapeBase(RectangularShapeBase<T> source) {
+    	// XXX the invocation of the super-copy-constructor is missing.
         this.shape = this.createShape();
         start = new Point(source.start.x, source.start.y);
         end = new Point(source.end.x, source.end.y);
@@ -61,14 +62,14 @@ public abstract class RectangularShapeBase<T extends Shape> extends FigureBase {
         start = origin;
         end = corner;
         setBoundsOnShape(shape, origin, corner);
-        handleFigureChange();
+        handleFigureChange(); // XXX actually only if the figure changed.
     }
 
     public abstract void move(T shape, int dx, int dy);
 
     @Override
     public final void move(int dx, int dy) {
-        if (dx != 0 && dy != 0) {
+        if (dx != 0 && dy != 0) { // XXX same here, || instead of &&
             move(shape, dx, dy);
             handleFigureChange();
         }

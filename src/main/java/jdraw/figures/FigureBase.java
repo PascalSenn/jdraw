@@ -14,6 +14,13 @@ public abstract class FigureBase implements Figure {
 
     public FigureBase(FigureBase figureBase) {
         this.changeListeners = new CopyOnWriteArrayList<>(figureBase.changeListeners);
+        // XXX You copy the content of the listener list, but I would consider that this is not 
+        //     state of the figure itself but rather state of the context, i.e. this content must
+        //     not be cloned. What do you do with a cloned figure? You might add it into a new model, 
+        //     but then a new listener will be registered in the figure which was added to the figure.
+        //     Another scenario could be to add the figure into another model. Why do we then still 
+        //     need/keep the listener of the original model in the cloned figure?
+        // 	   => I would simply initialize the changeListeners list with an empty list (could be done using a field initializator).
     }
 
     public FigureBase() {

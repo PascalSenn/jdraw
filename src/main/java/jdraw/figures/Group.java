@@ -15,7 +15,7 @@ public class Group implements Figure, FigureGroup {
     private final List<Figure> figures;
 
     public Group(List<Figure> figures) {
-        this.figures = figures;
+        this.figures = figures; // XXX probably it would be a good idea to copy that argument into an unmodifiable list as well.
     }
 
     public Group(Group group) {

@@ -323,7 +323,7 @@ public class StdContext extends AbstractContext {
             clipboard = view.getSelection();
             var model = view.getModel();
             view.getSelection().stream().forEach(f -> {
-                        view.removeFromSelection(f);
+                        view.removeFromSelection(f); // XXX you can drop this line as removal from the model implies removal from the selection
                         model.removeFigure(f);
                     }
             );
@@ -350,6 +350,9 @@ public class StdContext extends AbstractContext {
                     .forEach(f -> {
                                 model.addFigure(f);
                                 view.addToSelection(f);
+                                // XXX I recommend to remove the selection before the copy of the clipboard is pasted.
+                                //     Currently if I select figures, do a copy & paste, then the copy has exactly the same shape
+                                //     and is selected as well. Moving away the selection will move the original and the copy.
                             }
                     );
         }
