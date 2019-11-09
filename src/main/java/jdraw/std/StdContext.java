@@ -4,7 +4,7 @@
  */
 package jdraw.std;
 
-import java.io.File;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -283,8 +283,13 @@ public class StdContext extends AbstractContext {
             if (filter instanceof FileNameExtensionFilter && !filter.accept(file)) {
                 file = new File(chooser.getCurrentDirectory(), file.getName() + "." + ((FileNameExtensionFilter) filter).getExtensions()[0]);
             }
-            System.out.println("save current graphic to file " + file.getName() + " using format "
-                    + ((FileNameExtensionFilter) filter).getExtensions()[0]);
+
+
+            try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))) {
+                oos.writeObject((Serializable) getModel().getFigures().map(Figure::clone).collect(Collectors.toList()));
+            } catch (Exception ex) {
+                throw new RuntimeException((ex.getMessage()));
+            }
         }
     }
 
@@ -310,9 +315,16 @@ public class StdContext extends AbstractContext {
         int res = chooser.showOpenDialog(this);
 
         if (res == JFileChooser.APPROVE_OPTION) {
-            // read jdraw graphic
-            System.out.println("read file "
-                    + chooser.getSelectedFile().getName());
+            var path = chooser.getSelectedFile().getAbsolutePath();
+            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(path))) {
+                getModel().removeAllFigures();
+                var figures = (List<Figure>) ois.readObject();
+                for (var f : figures) {
+                    getView().getModel().addFigure(f);
+                }
+            } catch (Exception ex) {
+                throw new RuntimeException((ex.getMessage()));
+            }
         }
     }
 
