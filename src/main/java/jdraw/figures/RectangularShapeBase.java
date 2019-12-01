@@ -68,7 +68,7 @@ public abstract class RectangularShapeBase<T extends Shape> extends FigureBase {
 
     @Override
     public final void move(int dx, int dy) {
-        if (dx != 0 && dy != 0) {
+        if (dx != 0 || dy != 0) {
             move(shape, dx, dy);
             handleFigureChange();
         }

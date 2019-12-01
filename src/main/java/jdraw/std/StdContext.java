@@ -19,6 +19,8 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import jdraw.figures.*;
+import jdraw.figures.decorators.BorderDecorator;
+import jdraw.figures.decorators.BundleDecorator;
 import jdraw.framework.DrawCommandHandler;
 import jdraw.framework.DrawModel;
 import jdraw.framework.DrawTool;
@@ -151,6 +153,33 @@ public class StdContext extends AbstractContext {
         snapGrid.addActionListener((e) -> getView().setGrid(new SnapGrid()));
         JMenuItem noGrid = new JMenuItem("No Grid");
         noGrid.addActionListener((e) -> getView().setGrid(null));
+        JMenu decsMenu = new JMenu("Decorators...");
+
+        editMenu.add(decsMenu);
+        JMenuItem addBorder = new JMenuItem("Add Border Decorator");
+        decsMenu.add(addBorder);
+        addBorder.addActionListener(e -> {
+            List<Figure> s = getView().getSelection();
+            getView().clearSelection();
+            for (Figure f : s) {
+                BorderDecorator dec = new BorderDecorator(f);
+                getModel().removeFigure(f);
+                getModel().addFigure(dec);
+                getView().addToSelection(dec);
+            }
+        });
+        JMenuItem addBundle = new JMenuItem("Add Bundle Decorator");
+        decsMenu.add(addBundle);
+        addBundle.addActionListener(e -> {
+            List<Figure> s = getView().getSelection();
+            getView().clearSelection();
+            for (Figure f : s) {
+                BundleDecorator dec = new BundleDecorator(f);
+                getModel().removeFigure(f);
+                getModel().addFigure(dec);
+                getView().addToSelection(dec);
+            }
+        });
         grid.add(noGrid);
         grid.add(snapGrid);
         grid.add(basicGrid);

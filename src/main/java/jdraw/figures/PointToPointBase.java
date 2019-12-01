@@ -56,7 +56,7 @@ public abstract class PointToPointBase<T extends Shape> extends FigureBase {
 
     @Override
     public final void move(int dx, int dy) {
-        if (dx != 0 && dy != 0) {
+        if (dx != 0 || dy != 0) {
             this.start = new Point(this.start.x + dx, this.start.y + dy);
             this.end = new Point(this.end.x + dx, this.end.y + dy);
             handleFigureChange();
