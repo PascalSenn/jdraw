@@ -10,6 +10,7 @@ import java.util.List;
 public abstract class FigureDecoratorBase implements Figure {
     protected final Figure figure;
 
+
     public FigureDecoratorBase(Figure figure) {
         this.figure = figure;
     }
@@ -56,4 +57,9 @@ public abstract class FigureDecoratorBase implements Figure {
 
     @Override
     public abstract Figure clone();
+
+
+    public Figure getFigure() {
+        return figure;
+    }
 }

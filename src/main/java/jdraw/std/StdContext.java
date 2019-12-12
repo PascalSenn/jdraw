@@ -18,6 +18,7 @@ import javax.swing.KeyStroke;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import jdraw.commands.AddDecorator;
 import jdraw.commands.AddGroupCommand;
 import jdraw.commands.UngroupCommand;
 import jdraw.figures.*;
@@ -165,6 +166,7 @@ public class StdContext extends AbstractContext {
             getView().clearSelection();
             for (Figure f : s) {
                 BorderDecorator dec = new BorderDecorator(f);
+                getModel().getDrawCommandHandler().addCommand(AddDecorator.create(dec, this));
                 getModel().removeFigure(f);
                 getModel().addFigure(dec);
                 getView().addToSelection(dec);
@@ -177,6 +179,7 @@ public class StdContext extends AbstractContext {
             getView().clearSelection();
             for (Figure f : s) {
                 BundleDecorator dec = new BundleDecorator(f);
+                getModel().getDrawCommandHandler().addCommand(AddDecorator.create(dec, this));
                 getModel().removeFigure(f);
                 getModel().addFigure(dec);
                 getView().addToSelection(dec);
