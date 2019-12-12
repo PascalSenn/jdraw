@@ -18,6 +18,8 @@ import javax.swing.KeyStroke;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import jdraw.commands.AddGroupCommand;
+import jdraw.commands.UngroupCommand;
 import jdraw.figures.*;
 import jdraw.figures.decorators.BorderDecorator;
 import jdraw.figures.decorators.BundleDecorator;
@@ -260,13 +262,10 @@ public class StdContext extends AbstractContext {
     public void group(DrawView view) {
         var model = view.getModel();
         var selection = view.getSelection();
-        var group = new Group(selection);
-        group.getFigureParts().forEach(f -> {
-            model.removeFigure(f);
-            view.removeFromSelection(f);
-        });
-        model.addFigure(group);
-        view.addToSelection(group);
+        var group = new Group(selection, model);
+        var cmd = new AddGroupCommand(group, view, model);
+        model.getDrawCommandHandler().addCommand(cmd);
+        cmd.redo();
     }
 
 
@@ -277,16 +276,12 @@ public class StdContext extends AbstractContext {
                 .filter(x -> x instanceof Group)
                 .map(g -> ((Group) g))
                 .collect(toList());
+
         groups.forEach(g -> {
-            model.removeFigure(g);
-            view.removeFromSelection(g);
+            var cmd = new UngroupCommand(g, view, model);
+            model.getDrawCommandHandler().addCommand(cmd);
+            cmd.redo();
         });
-        groups.stream()
-                .flatMap(x -> StreamSupport.stream(x.getFigureParts().spliterator(), false))
-                .forEach(f -> {
-                    model.addFigure(f);
-                    view.addToSelection(f);
-                });
 
     }
 

@@ -7,9 +7,7 @@ package jdraw.figures;
 
 import jdraw.framework.DrawContext;
 import jdraw.framework.DrawTool;
-import jdraw.framework.DrawView;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 
@@ -72,6 +70,7 @@ public abstract class RectangularShapeToolBase extends ToolBase {
         }
         anchor = new Point(x, y);
         newShape = createFigure(x, y);
+        this.addAddCommand(newShape);
         view.getModel().addFigure(newShape);
     }
 

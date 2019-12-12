@@ -5,6 +5,8 @@
 
 package jdraw.framework;
 
+import jdraw.figures.GroupElement;
+
 /**
  * This interface provides access to figure parts for those figures
  * which consist of several parts, as e.g. for group figures.
@@ -19,5 +21,5 @@ public interface FigureGroup {
      *
      * @return parts of a figure
      */
-    Iterable<Figure> getFigureParts();
+    Iterable<GroupElement> getFigureParts();
 }

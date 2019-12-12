@@ -5,9 +5,8 @@
 
 package jdraw.figures;
 
-import jdraw.framework.DrawContext;
-import jdraw.framework.DrawTool;
-import jdraw.framework.DrawView;
+import jdraw.commands.AddCommand;
+import jdraw.framework.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -35,6 +34,7 @@ public abstract class ToolBase implements DrawTool {
      * instead of calling context.getView().
      */
     protected final DrawView view;
+    protected final DrawCommandHandler commandHandler;
 
     /**
      * Temporary variable.
@@ -54,6 +54,7 @@ public abstract class ToolBase implements DrawTool {
         this.name = name;
         this.context = context;
         this.view = context.getView();
+        this.commandHandler = context.getModel().getDrawCommandHandler();
     }
 
     /**
@@ -131,6 +132,11 @@ public abstract class ToolBase implements DrawTool {
     @Override
     public final String getName() {
         return name;
+    }
+
+    protected void addAddCommand(Figure f) {
+
+        this.commandHandler.addCommand(AddCommand.create(f, context));
     }
 
 }

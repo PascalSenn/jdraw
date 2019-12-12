@@ -44,6 +44,7 @@ public abstract class PointToPointToolBase extends ToolBase {
     public PointToPointToolBase(String name, DrawContext context) {
         super(name, context);
     }
+
     /**
      * Initializes a new point to point object
      *
@@ -72,6 +73,7 @@ public abstract class PointToPointToolBase extends ToolBase {
         }
         anchor = new Point(x, y);
         newShape = createFigure(x, y);
+        this.addAddCommand(newShape);
         view.getModel().addFigure(newShape);
     }
 
