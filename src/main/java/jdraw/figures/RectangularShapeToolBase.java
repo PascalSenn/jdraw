@@ -37,8 +37,8 @@ public abstract class RectangularShapeToolBase extends ToolBase {
      *
      * @param context a context to use this tool in.
      */
-    public RectangularShapeToolBase(String name, DrawContext context) {
-        super(name, context);
+    public RectangularShapeToolBase(String name, String iconName, DrawContext context) {
+        super(name, iconName, context);
     }
 
 
@@ -86,7 +86,7 @@ public abstract class RectangularShapeToolBase extends ToolBase {
      */
     @Override
     public final void mouseDrag(int x, int y, MouseEvent e) {
-		updateFigure(x, y);
+        updateFigure(x, y);
         java.awt.Rectangle r = newShape.getBounds();
         this.context.showStatusText("w: " + r.width + ", h: " + r.height);
     }

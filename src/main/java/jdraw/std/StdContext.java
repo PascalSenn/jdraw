@@ -220,12 +220,13 @@ public class StdContext extends AbstractContext {
 
     @Override
     protected void doRegisterDrawTools() {
-        // TODO Add new figure tools here
-        DrawTool rectangleTool = new RectTool(this);
-        addTool(rectangleTool);
-        addTool(new CircleTool(this));
-        addTool(new OvalTool(this));
-        addTool(new LineTool(this));
+        for (var toolFactory : getToolFactories()) {
+            if (toolFactory == null) {
+                addTool(null);
+            } else {
+                addTool(toolFactory.createTool(this));
+            }
+        }
     }
 
     /**

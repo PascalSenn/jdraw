@@ -41,8 +41,8 @@ public abstract class PointToPointToolBase extends ToolBase {
      *
      * @param context a context to use this tool in.
      */
-    public PointToPointToolBase(String name, DrawContext context) {
-        super(name, context);
+    public PointToPointToolBase(String name, String iconName, DrawContext context) {
+        super(name, iconName, context);
     }
 
     /**

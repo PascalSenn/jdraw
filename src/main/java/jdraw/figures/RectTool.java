@@ -24,7 +24,11 @@ public class RectTool extends RectangularShapeToolBase {
      * @param context a context to use this tool in.
      */
     public RectTool(DrawContext context) {
-        super("Rectangle", context);
+        this("Rectangle", "rectangle.png", context);
+    }
+
+    public RectTool(String name, String iconName, DrawContext context) {
+        super(name, iconName, context);
     }
 
 

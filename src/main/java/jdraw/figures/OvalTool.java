@@ -17,23 +17,26 @@ import java.awt.*;
  */
 public class OvalTool extends RectangularShapeToolBase {
 
-	/**
-	 * Create a new oval tool for the given context.
-	 *
-	 * @param context a context to use this tool in.
-	 */
-	public OvalTool(DrawContext context) {
-		super("Oval", context);
-	}
+    /**
+     * Create a new oval tool for the given context.
+     *
+     * @param context a context to use this tool in.
+     */
+    public OvalTool(DrawContext context) {
+        this("Oval", "oval.png", context);
+    }
 
+    public OvalTool(String name, String iconName, DrawContext context) {
+        super(name, iconName, context);
+    }
 
-	@Override
-	public RectangularShapeBase createFigure(int x, int y) {
-		return new Oval(x, y, 0, 0);
-	}
+    @Override
+    public RectangularShapeBase createFigure(int x, int y) {
+        return new Oval(x, y, 0, 0);
+    }
 
-	@Override
-	public void updateFigure(int x, int y) {
-		newShape.setBounds(anchor, new Point(x,y));
-	}
+    @Override
+    public void updateFigure(int x, int y) {
+        newShape.setBounds(anchor, new Point(x, y));
+    }
 }

@@ -44,14 +44,16 @@ public abstract class ToolBase implements DrawTool {
     protected Point anchor = null;
 
     public final String name;
+    private final String iconName;
 
     /**
      * Create a new rectangular shape tool for the given context.
      *
      * @param context a context to use this tool in.
      */
-    public ToolBase(String name, DrawContext context) {
+    public ToolBase(String name, String iconName, DrawContext context) {
         this.name = name;
+        this.iconName = iconName;
         this.context = context;
         this.view = context.getView();
         this.commandHandler = context.getModel().getDrawCommandHandler();
@@ -126,7 +128,7 @@ public abstract class ToolBase implements DrawTool {
 
     @Override
     public final Icon getIcon() {
-        return new ImageIcon(getClass().getResource(IMAGES + name.toLowerCase() + ".png"));
+        return new ImageIcon(getClass().getResource(IMAGES + iconName));
     }
 
     @Override

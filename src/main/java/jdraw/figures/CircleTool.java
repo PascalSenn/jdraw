@@ -17,31 +17,35 @@ import java.awt.*;
  */
 public class CircleTool extends RectangularShapeToolBase {
 
-	/**
-	 * Create a new rectangle tool for the given context.
-	 *
-	 * @param context a context to use this tool in.
-	 */
-	public CircleTool(DrawContext context) {
-		super("Circle", context);
-	}
+    /**
+     * Create a new rectangle tool for the given context.
+     *
+     * @param context a context to use this tool in.
+     */
+    public CircleTool(DrawContext context) {
+        this("Circle", "circle.png", context);
+    }
+
+    public CircleTool(String name, String iconName, DrawContext context) {
+        super(name, iconName, context);
+    }
 
 
-	@Override
-	public RectangularShapeBase createFigure(int x, int y) {
-		return new Oval(x, y, 0, 0);
-	}
+    @Override
+    public RectangularShapeBase createFigure(int x, int y) {
+        return new Oval(x, y, 0, 0);
+    }
 
-	@Override
-	public void updateFigure(int x, int y) {
-		var delta = new Point(x- anchor.x, y- anchor.y);
-		if(Math.abs(delta.x) < Math.abs(delta.y)) {
-			delta.x = delta.y;
-		} else {
-			delta.y = delta.x;
-		}
-		delta.x += anchor.x;
-		delta.y += anchor.y;
-		newShape.setBounds(anchor, delta);
-	}
+    @Override
+    public void updateFigure(int x, int y) {
+        var delta = new Point(x - anchor.x, y - anchor.y);
+        if (Math.abs(delta.x) < Math.abs(delta.y)) {
+            delta.x = delta.y;
+        } else {
+            delta.y = delta.x;
+        }
+        delta.x += anchor.x;
+        delta.y += anchor.y;
+        newShape.setBounds(anchor, delta);
+    }
 }
